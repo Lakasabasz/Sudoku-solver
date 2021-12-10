@@ -1,6 +1,12 @@
 #include "sudoku.h"
 #include <bitset>
 
+#ifdef _MSC_VER
+#  include <intrin.h>
+#  define __builtin_popcount __popcnt
+#endif
+
+
 bool Sudoku::singleint(uint16_t i)
 {
     return __builtin_popcount(i) == 1;
@@ -49,7 +55,7 @@ uint16_t Sudoku::sumSquare(uint16_t x, uint16_t y)
 
 Sudoku::Sudoku(): solution{}{}
 
-void Sudoku::loadFromIntMatrix(int **schema)
+void Sudoku::loadFromIntDynamicMatrix(int **schema)
 {
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
@@ -57,6 +63,14 @@ void Sudoku::loadFromIntMatrix(int **schema)
             else solution[i][j] = (1 << (schema[i][j]-1));
         }
     }
+}
+
+void Sudoku::loadFromIntMatrix(int schema[9][9])
+{
+	forEachPoint([&](int row, int col) {
+		if (schema[row][col] == 0) possiblities.insert(std::make_pair(std::make_pair(row, col), 0));
+		else solution[row][col] = (1 << (schema[row][col] - 1));
+		});
 }
 
 std::string Sudoku::getDisplayString(bool extended)

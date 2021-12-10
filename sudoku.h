@@ -23,7 +23,8 @@ private:
 
 public:
     Sudoku();
-    void loadFromIntMatrix(int** schema);
+    void loadFromIntDynamicMatrix(int** schema);
+	void loadFromIntMatrix(int schema[9][9]);
     std::string getDisplayString(bool extended = false);
 
     bool fullSolve();
